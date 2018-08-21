@@ -4,7 +4,7 @@ package com.autostow3.model.domain;
  * Created by csw on 2017/5/4 19:52.
  * Explain:
  */
-public final class CWPDomain {
+public final class StowDomain {
 
     public static final String LD_STRATEGY_BLD = "LD_STRATEGY_BLD";
     public static final String LD_STRATEGY_LD = "LD_STRATEGY_LD";

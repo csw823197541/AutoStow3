@@ -1,6 +1,8 @@
 package com.autostow3.test.ViewFrame;
 
 import com.autostow3.data.AllRuntimeData;
+import com.autostow3.service.parse.ParseDataService;
+import com.autostow3.service.stow.StowService;
 import com.shbtos.biz.smart.cwp.pojo.*;
 import com.shbtos.biz.smart.cwp.service.SmartStowImportData;
 
@@ -71,8 +73,11 @@ public class ImportDataFrameAllShip extends JFrame {
         executeBnt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if (GlobalData.selectedBerthId != null) {
+                    ParseDataService parseDataService = new ParseDataService();
+                    allRuntimeData = parseDataService.parseAllRuntimeData(smartStowImportData);
+                    StowService stowService = new StowService();
+                    stowService.doAutoStow(allRuntimeData, GlobalData.selectedBerthId);
 
                 } else {
                     System.out.println("请选择相应的航次信息！");
@@ -81,7 +86,7 @@ public class ImportDataFrameAllShip extends JFrame {
             }
         });
 
-        reWorkBnt = new JButton("重排CWP");
+        reWorkBnt = new JButton("调用多船配载");
         reWorkBnt.setBackground(Color.CYAN);
         reWorkBnt.addActionListener(new ActionListener() {
             @Override

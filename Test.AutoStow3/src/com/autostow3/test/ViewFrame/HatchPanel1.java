@@ -4,19 +4,13 @@ package com.autostow3.test.ViewFrame;
 import com.autostow3.data.AllRuntimeData;
 import com.autostow3.data.single.StructureData;
 import com.autostow3.data.single.WorkingData;
-import com.autostow3.model.domain.CWPDomain;
-import com.autostow3.model.stow.VesselContainer;
 import com.autostow3.model.vessel.VMBay;
-import com.autostow3.model.vessel.VMRow;
 import com.autostow3.model.vessel.VMSlot;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by CarloJones on 2018/7/11.
@@ -156,7 +150,7 @@ public class HatchPanel1 extends JPanel {
 //            } else {
 //                gridBagConstraints.gridx = 1;
 //            }
-//            if (vmBay.getAboveOrBelow().equals(CWPDomain.BOARD_ABOVE)) {
+//            if (vmBay.getAboveOrBelow().equals(StowDomain.BOARD_ABOVE)) {
 //                gridBagConstraints.gridy = 0;
 //            } else {
 //                gridBagConstraints.gridy = 1;
@@ -179,8 +173,8 @@ public class HatchPanel1 extends JPanel {
         JPanel jPanel = new JPanel();
         String panelBorderTitle = vmBay.getBayNo() + vmBay.getAboveOrBelow().substring(0, 1) + "-" + bayId;
         jPanel.setBorder(BorderFactory.createTitledBorder(panelBorderTitle));
-//        java.util.List<Integer> rowSeqList = structureData.getRowSeqListByOddOrEven(bayId, CWPDomain.ROW_SEQ_EVEN_ODD);
-//        java.util.List<Integer> hatchRowSeqList = structureData.getRowSeqListBySeaOrLand(hatchId,CWPDomain.ROW_SEQ_EVEN_ODD);
+//        java.util.List<Integer> rowSeqList = structureData.getRowSeqListByOddOrEven(bayId, StowDomain.ROW_SEQ_EVEN_ODD);
+//        java.util.List<Integer> hatchRowSeqList = structureData.getRowSeqListBySeaOrLand(hatchId,StowDomain.ROW_SEQ_EVEN_ODD);
         int maxTierNo = vmBay.getMaxTier();
         int minTierNo = vmBay.getMinTier();
         int tierCount = (maxTierNo - minTierNo) / 2 + 1;
@@ -199,7 +193,7 @@ public class HatchPanel1 extends JPanel {
 //
 //                int curTierNo = maxTierNo - 2 * j;
 //                JLabel jLabel = null;
-//                if(vmBay.getAboveOrBelow().equals(CWPDomain.BOARD_ABOVE)){
+//                if(vmBay.getAboveOrBelow().equals(StowDomain.BOARD_ABOVE)){
 //                    //第0列添加层号信息
 //                    if (i == 0) {
 //                        if (j == tierCount) {   //左下角
@@ -230,7 +224,7 @@ public class HatchPanel1 extends JPanel {
 //                        }
 //
 //                    }
-//                }else if(vmBay.getAboveOrBelow().equals(CWPDomain.BOARD_BELOW)) {
+//                }else if(vmBay.getAboveOrBelow().equals(StowDomain.BOARD_BELOW)) {
 //                    if (i == 0) {
 //                        if (j == 0) {
 //                            jLabel = getSideLabel("左上角");
@@ -295,7 +289,7 @@ public class HatchPanel1 extends JPanel {
 //            if (vmContainer == null) {
 //                jLabel.setBackground(colorEmptySlot);
 //            } else {
-//                if (CWPDomain.YES.equals(vmContainer.getCwoManualWi())) {
+//                if (StowDomain.YES.equals(vmContainer.getCwoManualWi())) {
 //                    jLabel.setBackground(colorThrough);
 //                }else {
 //                    if (vmContainer.getSize().startsWith("4")) {
@@ -305,7 +299,7 @@ public class HatchPanel1 extends JPanel {
 //                        jLabel.setBackground(color20);
 //                    }
 //                    //状态显示
-//                    if(!(vmContainer.getDgCd() == null|| vmContainer.getDgCd().equals(CWPDomain.DG_NORMAL))){
+//                    if(!(vmContainer.getDgCd() == null|| vmContainer.getDgCd().equals(StowDomain.DG_NORMAL))){
 //                        jLabel.setBackground(danger);
 //                    }
 //                }
