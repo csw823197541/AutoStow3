@@ -6,12 +6,8 @@ package com.autostow3.model.domain;
  */
 public final class StowDomain {
 
-    public static final String LD_STRATEGY_BLD = "LD_STRATEGY_BLD";
-    public static final String LD_STRATEGY_LD = "LD_STRATEGY_LD";
     public static final String VESSEL_TYPE_FCS = "VESSEL_TYPE_FCS";
     public static final String VESSEL_TYPE_BAR = "VESSEL_TYPE_BAR";
-    public static final String CWP_TYPE_PLAN = "CWP_TYPE_PLAN";
-    public static final String CWP_TYPE_WORK = "CWP_TYPE_WORK";
     public static final String ROW_SEQ_SEA_LAND = "ROW_SEQ_SEA_LAND";
     public static final String ROW_SEQ_LAND_SEA = "ROW_SEQ_LAND_SEA";
     public static final String ROW_SEQ_EVEN_ODD = "ROW_SEQ_EVEN_ODD"; //(前面)是偶数排，后面是奇数排

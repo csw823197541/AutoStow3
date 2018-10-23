@@ -18,6 +18,8 @@ public class VesselContainer {
     private Long groupId;       //属性组
     private Long weightId;       //重量组
     private Long cntWorkTime; //人工设置的箱子作业效率，时间（s）
+    private String lockFlag; //预配位是否锁住标记
+    private String fixedWeightLevel; //是否指定重量等级
 
     private String throughFlag; //过境箱标记
     private String rfFlag;	//冷藏箱标记
@@ -28,22 +30,14 @@ public class VesselContainer {
     private String overrunCd; //超限代码
     private Double weightKg; //重量（kg）
 
-    private String assistWork;//附加作业：过高架，平板，钢丝绳
-    private String cwoManualWorkflow; //人工指定作业工艺
-    private String cwoManualSeqno; //人工指定作业顺序
-    private String cwoManualWi; //人工锁定的船箱位，发箱时不能作业的箱子，CWP计划排到最后面
-
     private String craneNo; //桥机号
     private String workFlow; //作业工艺
     private Long moveOrder; //作业顺序
     private Date workingStartTime; //计划开始作业时间
     private Date workingEndTime; //计划结束作业时间
-    private Integer moveWorkTime; //每一个move的作业时间(单位是：秒)
-    private Double cranePosition;//桥机当前位置
-    private Integer qdc; //是否启动舱
+
     private Long berthId; //靠泊Id
     private Long hatchId; //箱子所在舱
-    private String directCntFlag; //直装箱标记，Y表示箱子标记为直装箱，N或者null表示非直装箱子
 
     public VesselContainer(String vLocation, String dlType) {
         this.vLocation = vLocation;
@@ -192,38 +186,6 @@ public class VesselContainer {
         this.weightKg = weightKg;
     }
 
-    public String getAssistWork() {
-        return assistWork;
-    }
-
-    public void setAssistWork(String assistWork) {
-        this.assistWork = assistWork;
-    }
-
-    public String getCwoManualWorkflow() {
-        return cwoManualWorkflow;
-    }
-
-    public void setCwoManualWorkflow(String cwoManualWorkflow) {
-        this.cwoManualWorkflow = cwoManualWorkflow;
-    }
-
-    public String getCwoManualSeqno() {
-        return cwoManualSeqno;
-    }
-
-    public void setCwoManualSeqno(String cwoManualSeqno) {
-        this.cwoManualSeqno = cwoManualSeqno;
-    }
-
-    public String getCwoManualWi() {
-        return cwoManualWi;
-    }
-
-    public void setCwoManualWi(String cwoManualWi) {
-        this.cwoManualWi = cwoManualWi;
-    }
-
     public String getCraneNo() {
         return craneNo;
     }
@@ -264,30 +226,6 @@ public class VesselContainer {
         this.workingEndTime = workingEndTime;
     }
 
-    public Integer getMoveWorkTime() {
-        return moveWorkTime;
-    }
-
-    public void setMoveWorkTime(Integer moveWorkTime) {
-        this.moveWorkTime = moveWorkTime;
-    }
-
-    public Double getCranePosition() {
-        return cranePosition;
-    }
-
-    public void setCranePosition(Double cranePosition) {
-        this.cranePosition = cranePosition;
-    }
-
-    public Integer getQdc() {
-        return qdc;
-    }
-
-    public void setQdc(Integer qdc) {
-        this.qdc = qdc;
-    }
-
     public Long getBerthId() {
         return berthId;
     }
@@ -304,11 +242,19 @@ public class VesselContainer {
         this.hatchId = hatchId;
     }
 
-    public String getDirectCntFlag() {
-        return directCntFlag;
+    public String getLockFlag() {
+        return lockFlag;
     }
 
-    public void setDirectCntFlag(String directCntFlag) {
-        this.directCntFlag = directCntFlag;
+    public void setLockFlag(String lockFlag) {
+        this.lockFlag = lockFlag;
+    }
+
+    public String getFixedWeightLevel() {
+        return fixedWeightLevel;
+    }
+
+    public void setFixedWeightLevel(String fixedWeightLevel) {
+        this.fixedWeightLevel = fixedWeightLevel;
     }
 }

@@ -17,7 +17,7 @@ public class StowService {
             StowProcess stowProcess = new StowProcess(allRuntimeData, berthId);
             stowProcess.processCwp();
         } catch (Exception e) {
-            workingData.getLogger().logError("对船舶(berthId:" + berthId + ")进行自动配载时发生异常。");
+            workingData.getLogger().logError("对船舶(berthId:" + berthId + ")进行自动配载时发生异常！");
             e.printStackTrace();
         }
         workingData.getLogger().logInfo("船舶(berthId:" + berthId + ")自动配载结束。");

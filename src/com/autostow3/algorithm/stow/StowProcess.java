@@ -26,6 +26,6 @@ public class StowProcess {
         //..............
 
         long et = System.currentTimeMillis();
-        logger.logInfo("运行结束，执行时间是：" + (et - st) / 1000 + "秒");
+        logger.logInfo("执行结束，执行时间是：" + (et - st) / 1000 + "秒");
     }
 }

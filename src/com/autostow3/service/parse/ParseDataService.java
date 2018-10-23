@@ -22,8 +22,11 @@ import java.util.List;
  */
 public class ParseDataService {
 
+    private Logger logger;
+
     public AllRuntimeData parseAllRuntimeData(SmartStowImportData smartStowImportData) {
         AllRuntimeData allRuntimeData = new AllRuntimeData();
+        logger = allRuntimeData.getLogger();
 
         List<VMSchedule> vmScheduleList = parseSchedule(smartStowImportData.getSmartScheduleIdInfoList(), allRuntimeData);
         for (VMSchedule vmSchedule : vmScheduleList) {
@@ -36,7 +39,6 @@ public class ParseDataService {
     }
 
     private List<VMSchedule> parseSchedule(List<SmartScheduleIdInfo> smartScheduleIdInfoList, AllRuntimeData allRuntimeData) {
-        Logger logger = allRuntimeData.getLogger();
         List<VMSchedule> vmScheduleList = new ArrayList<>();
         logger.logInfo("当前运行的自动配载算法版本号为: " + DefaultValue.STOW_VERSION);
         logger.logError("航次信息", ValidatorUtil.isEmpty(smartScheduleIdInfoList));
@@ -71,8 +73,7 @@ public class ParseDataService {
     }
 
     private void parseVesselContainer(List<SmartVesselContainerInfo> smartVesselContainerInfoList, AllRuntimeData allRuntimeData) {
-        Logger logger = allRuntimeData.getLogger();
-        logger.logError("CWP计划信息", ValidatorUtil.isEmpty(smartVesselContainerInfoList));
+        logger.logError("出口船图箱信息", ValidatorUtil.isEmpty(smartVesselContainerInfoList));
         WorkingData workingData;
         for (SmartVesselContainerInfo smartVesselContainerInfo : smartVesselContainerInfoList) {
             Long berthId = smartVesselContainerInfo.getBerthId();
@@ -113,7 +114,6 @@ public class ParseDataService {
                         vesselContainer.setIsHeight(isHeight);
                         vesselContainer.setRfFlag(rfFlag);
                         vesselContainer.setOverrunCd(overrunCd);
-                        workingData.getVesselContainerList().add(vesselContainer);
                     }
                 }
             } catch (Exception e) {

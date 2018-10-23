@@ -3,6 +3,7 @@ package com.autostow3.test.ViewFrame;
 import com.autostow3.data.AllRuntimeData;
 import com.autostow3.service.parse.ParseDataService;
 import com.autostow3.service.stow.StowService;
+import com.autostow3.service.weight.WeightService;
 import com.shbtos.biz.smart.cwp.pojo.*;
 import com.shbtos.biz.smart.cwp.service.SmartStowImportData;
 
@@ -13,9 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by csw on 2016/12/13 14:48.
  * Explain:
@@ -62,6 +60,12 @@ public class ImportDataFrameAllShip extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (GlobalData.selectedBerthId != null) {
 
+                    ParseDataService parseDataService = new ParseDataService();
+                    allRuntimeData = parseDataService.parseAllRuntimeData(smartStowImportData);
+
+                    WeightService weightService = new WeightService();
+                    weightService.doWeightLevel(allRuntimeData, GlobalData.selectedBerthId);
+
                 } else {
                     System.out.println("请选择相应的航次信息！");
                 }
@@ -74,8 +78,10 @@ public class ImportDataFrameAllShip extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (GlobalData.selectedBerthId != null) {
+
                     ParseDataService parseDataService = new ParseDataService();
                     allRuntimeData = parseDataService.parseAllRuntimeData(smartStowImportData);
+
                     StowService stowService = new StowService();
                     stowService.doAutoStow(allRuntimeData, GlobalData.selectedBerthId);
 
@@ -178,23 +184,34 @@ public class ImportDataFrameAllShip extends JFrame {
                 }
             }
         });
+        voyCranePane.add(scheduleInfoFrame);
 
-//        BaseFrame cranePoolInfoFrame = new BaseFrame("桥机池信息", SmartCranePoolInfo.class, smartStowImportData.getSmartCranePoolInfoList());
-//        cranePoolInfoFrame.setVisible(true);
-//        voyCranePane.add(cranePoolInfoFrame);
-//        BaseFrame vesselCranePoolInfoFrame = new BaseFrame("船舶桥机池信息", SmartVesselCranePoolInfo.class, smartStowImportData.getSmartVesselCranePoolInfoList());
-//        vesselCranePoolInfoFrame.setVisible(true);
-//        voyCranePane.add(vesselCranePoolInfoFrame);
-//        BaseFrame craneMaintainInfoFrame = new BaseFrame("桥机维修计划信息", SmartCraneMaintainPlanInfo.class, smartStowImportData.getSmartCraneMaintainPlanInfoList());
-//        craneMaintainInfoFrame.setVisible(true);
-//        voyCranePane.add(craneMaintainInfoFrame);
-//        BaseFrame cranePlanInfoFrame = new BaseFrame("桥机计划工作信息", SmartCranePlanInfo.class, smartStowImportData.getSmartCranePlanInfoList());
-//        cranePlanInfoFrame.setVisible(true);
-//        voyCranePane.add(cranePlanInfoFrame);
-        BaseFrame cwpConfigurationInfFrame = new BaseFrame("配载参数", SmartStowageConfigurationInfo.class, smartStowImportData.getSmartStowageConfigurationInfoList());
-        cwpConfigurationInfFrame.setSize(GlobalData.width - 50, GlobalData.height - 600);
-        cwpConfigurationInfFrame.setVisible(true);
-        voyCranePane.add(cwpConfigurationInfFrame);
+        BaseFrame stowConfigInfFrame = new BaseFrame("配载参数", SmartStowageConfigurationInfo.class, smartStowImportData.getSmartStowageConfigurationInfoList());
+        stowConfigInfFrame.setSize(GlobalData.width - 50, GlobalData.height - 600);
+        stowConfigInfFrame.setVisible(true);
+        voyCranePane.add(stowConfigInfFrame);
+        BaseFrame yardCntInfoFrame = new BaseFrame("在场箱信息", SmartYardContainerInfo.class, smartStowImportData.getSmartYardContainerInfoList());
+        yardCntInfoFrame.setVisible(true);
+        voyCranePane.add(yardCntInfoFrame);
+        BaseFrame groupInfoFrame = new BaseFrame("属性组信息", SmartContainerGroupInfo.class, smartStowImportData.getSmartContainerGroupInfoList());
+        groupInfoFrame.setVisible(true);
+        voyCranePane.add(groupInfoFrame);
+        BaseFrame weightInfoFrame = new BaseFrame("重量组信息", SmartWeightGroupInfo.class, smartStowImportData.getSmartWeightGroupInfoList());
+        weightInfoFrame.setVisible(true);
+        voyCranePane.add(weightInfoFrame);
+        BaseFrame portGroupInfoFrame = new BaseFrame("港口组信息", SmartPortGroupInfo.class, smartStowImportData.getSmartPortGroupInfoList());
+        portGroupInfoFrame.setVisible(true);
+        voyCranePane.add(portGroupInfoFrame);
+
+        try {
+            stowConfigInfFrame.setIcon(true);
+            yardCntInfoFrame.setIcon(true);
+            groupInfoFrame.setIcon(true);
+            weightInfoFrame.setIcon(true);
+            portGroupInfoFrame.setIcon(true);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
 
         //----船舶结构信息----
         BaseFrame hatchInfoFrame = new BaseFrame("舱信息", SmartVpsVslHatchsInfo.class, smartStowImportData.getSmartVpsVslHatchsInfoList());
@@ -211,7 +228,7 @@ public class ImportDataFrameAllShip extends JFrame {
         vesselStructPane.add(locationInfoFrame);
 
         try {
-            cwpConfigurationInfFrame.setIcon(true);
+            stowConfigInfFrame.setIcon(true);
             bayInfoFrame.setIcon(true);
             rowInfoFrame.setIcon(true);
             locationInfoFrame.setIcon(true);
@@ -239,12 +256,6 @@ public class ImportDataFrameAllShip extends JFrame {
         BaseFrame lockLocationInfoFrame = new BaseFrame("锁定船箱位信息", SmartStowageLockLocationsInfo.class, smartStowImportData.getSmartStowageLockLocationsInfoList());
         lockLocationInfoFrame.setVisible(true);
         preStowPane.add(lockLocationInfoFrame);
-//        BaseFrame areaCntInfoFrame = new BaseFrame("箱区统计信息", SmartAreaContainerInfo.class, smartStowImportData.getSmartAreaContainerInfoList());
-//        areaCntInfoFrame.setVisible(true);
-//        preStowPane.add(areaCntInfoFrame);
-        BaseFrame groupInfoFrame = new BaseFrame("属性组信息", SmartContainerGroupInfo.class, smartStowImportData.getSmartContainerGroupInfoList());
-        groupInfoFrame.setVisible(true);
-        preStowPane.add(groupInfoFrame);
 
         try {
             lockLocationInfoFrame.setIcon(true);
