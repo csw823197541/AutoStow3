@@ -10,6 +10,7 @@ public class WeightGroup {
     private Long weightId; //重量等级ID
     private Double minWeight; //最小重量
     private Double maxWeight; //最大重量
+    private Integer weightSeq; // 重量等级Seq，可以当作等级主键
 
     public WeightGroup(Long berthId, Long weightId) {
         this.berthId = berthId;
@@ -46,5 +47,13 @@ public class WeightGroup {
 
     public void setMaxWeight(Double maxWeight) {
         this.maxWeight = maxWeight;
+    }
+
+    public Integer getWeightSeq() {
+        return weightSeq;
+    }
+
+    public void setWeightSeq(Integer weightSeq) {
+        this.weightSeq = weightSeq;
     }
 }

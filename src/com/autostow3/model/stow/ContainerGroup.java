@@ -21,6 +21,11 @@ public class ContainerGroup {
         this.groupId = groupId;
     }
 
+    @Override
+    public String toString() {
+        return "groupId：" + groupId + "，卸货港：" + portCd + "，尺寸：" + size + "，箱型：" + type + "，空重：" + efFlag + "，冷藏箱：" + rfFlag + "，高平箱：" + isHeight + "，危险品：" + dgCd;
+    }
+
     public Long getBerthId() {
         return berthId;
     }

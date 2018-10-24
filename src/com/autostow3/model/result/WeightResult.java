@@ -12,6 +12,7 @@ public class WeightResult {
     private Long voyageId; //航次ID
     private Long hatchId; //舱ID
     private Long weightId; //重量等级ID
+    private Integer weightSeq;
     private Long groupId; //属性组
     private String ldFlag; //装卸船标志
     private Boolean fixedWeightLevel; //是否指定重量等级
@@ -19,6 +20,24 @@ public class WeightResult {
 
     public WeightResult(String vLocation) {
         this.vLocation = vLocation;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof WeightResult) {
+            WeightResult weightResult = (WeightResult) obj;
+            return vLocation.equals(weightResult.getvLocation());
+        } else {
+            return false;
+        }
+    }
+
+    public Integer getWeightSeq() {
+        return weightSeq;
+    }
+
+    public void setWeightSeq(Integer weightSeq) {
+        this.weightSeq = weightSeq;
     }
 
     public String getvLocation() {

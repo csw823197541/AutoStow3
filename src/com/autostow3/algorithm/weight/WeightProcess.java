@@ -19,13 +19,11 @@ import java.util.*;
  */
 public class WeightProcess {
 
-    private AllRuntimeData allRuntimeData;
     private WorkingData workingData;
     private StructureData structureData;
     private WeightAnalyzer weightAnalyzer;
 
     public WeightProcess(AllRuntimeData allRuntimeData, Long berthId) {
-        this.allRuntimeData = allRuntimeData;
         workingData = allRuntimeData.getWorkingDataByBerthId(berthId);
         structureData = allRuntimeData.getStructDataByVesselCode(workingData.getVesselCode());
         weightAnalyzer = new WeightAnalyzer();
@@ -93,11 +91,32 @@ public class WeightProcess {
     }
 
     private void drawLocationWithWeightLevel(List<Integer> bayNos, Integer rowNo, int curTierNo, WorkingData workingData, StructureData structureData) {
+        Logger logger = workingData.getLogger();
         for (Integer bayNo : bayNos) {
             VMSlot vmSlot = structureData.getVMSlotByVLocation(new VMPosition(bayNo, rowNo, curTierNo).getVLocation());
             VesselContainer vesselContainer = workingData.getVesselContainerByVMSlot(vmSlot);
             if (vesselContainer != null && PublicMethod.canDrawLevelCnt(vesselContainer)) {
-
+                WeightResult weightResult = workingData.getWeightResultByVMSlot(vmSlot);
+                if (weightResult.getWeightSeq() == null) { // 预配位没有划分过重量等级
+                    Map<Integer, Integer> weightNumMap = workingData.getGroupWeightNumMap().get(vesselContainer.getGroupId());
+                    if (weightNumMap != null) {
+                        Integer weightSeq = null;
+                        int num = 0;
+                        for (Map.Entry<Integer, Integer> entry : weightNumMap.entrySet()) {
+                            if (entry.getValue() > 0) {
+                                weightSeq = entry.getKey();
+                                num = entry.getValue();
+                                break;
+                            }
+                        }
+                        if (weightSeq != null) {
+                            weightResult.setWeightSeq(weightSeq);
+                            weightNumMap.put(weightSeq, num - 1);
+                        } else {
+                            logger.logError("在给预配位(" + vesselContainer.getvLocation() + ")划分重量等级时无法找到weightId，可配在场箱不够！");
+                        }
+                    }
+                }
             }
         }
     }
@@ -144,7 +163,7 @@ public class WeightProcess {
 
     private int getAboveWeightTierNo(Long hatchId, WorkingData workingData, StructureData structureData) {
         int aboveWeightCntTier = workingData.getStowConfig().getAboveWeightCntTier();
-        VMHatch vmHatch = structureData.getLeftVMHatch(hatchId);
+        VMHatch vmHatch = structureData.getVMHatchByHatchId(hatchId);
         if (vmHatch.getBayNoD() >= workingData.getStowConfig().getTailLightCntBayNo()) {
             aboveWeightCntTier = 0;
         }
@@ -157,9 +176,9 @@ public class WeightProcess {
     }
 
     private int getBelowWeightTierNo(Long hatchId, WorkingData workingData, StructureData structureData) {
-        VMHatch vmHatch = structureData.getLeftVMHatch(hatchId);
+        VMHatch vmHatch = structureData.getVMHatchByHatchId(hatchId);
         if (vmHatch.getBayNoD() >= workingData.getStowConfig().getTailLightCntBayNo())
-            if (StowDomain.YES.equals(workingData.getStowConfig().getTailBayHatchWeightCntFlag())) {
+            if (StowDomain.YES.equals(workingData.getStowConfig().getTailBayBelowWeightCntFlag())) {
                 return 0;
             }
         return 50;

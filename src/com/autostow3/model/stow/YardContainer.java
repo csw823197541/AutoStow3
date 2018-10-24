@@ -25,6 +25,7 @@ public class YardContainer {
     private String UnNo; //危险品联合国编号
     private String isHeight; // 是否高箱
     private String heightCd; //箱高代码
+    private Long groupId;
 
     private String stowageFlag; //是否可配载
     private String cntType; //箱子状态，DOC表示资料箱子
@@ -208,5 +209,13 @@ public class YardContainer {
 
     public void setAscWorkCntTime(Integer ascWorkCntTime) {
         this.ascWorkCntTime = ascWorkCntTime;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 }

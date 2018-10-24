@@ -247,8 +247,6 @@ public class ImportDataFrameAllShip extends JFrame {
                 JTable table = containerInfoFrame.table;
                 if (e.getClickCount() == 2) {
                     Long hatchId = Long.valueOf(table.getValueAt(table.getSelectedRow(), table.getColumnModel().getColumnIndex("hatchId")).toString());
-                    HatchFrame hatchFrame = new HatchFrame(GlobalData.selectedBerthId, hatchId, "D", allRuntimeData);
-                    hatchFrame.setVisible(true);
                     HatchFrame hatchFrame1 = new HatchFrame(GlobalData.selectedBerthId, hatchId, "L", allRuntimeData);
                     hatchFrame1.setVisible(true);
                 }

@@ -13,4 +13,5 @@ public class CompareUtil {
     public static boolean inEqualScope(int value, int from, int to) {
         return from < to ? value >= from && value <= to : value >= to && value <= from;
     }
+
 }

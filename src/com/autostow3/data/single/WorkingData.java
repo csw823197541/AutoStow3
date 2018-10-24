@@ -15,10 +15,7 @@ import com.autostow3.model.vessel.VMSchedule;
 import com.autostow3.model.vessel.VMSlot;
 import com.autostow3.model.weight.WeightGroup;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by csw on 2018/8/21.
@@ -37,6 +34,7 @@ public class WorkingData {
     private Map<Long, YardContainer> yardContainerMap; //在场箱数据，<containerId, YardContainer>
 
     //以下是算法运行之前分析数据产生的中间结果
+    private Map<Long, Map<Integer, Integer>> groupWeightNumMap; // 每个属性组每个重量等级的在场箱个数，<groupId, <weightSeq, number>>
     private Map<String, StowMove> stowMoveMap; //配载对象Move，Map<vLocation, StowMove> 小位置，02需要拆成01和03
 
     //以下是算法运行的结果数据
@@ -51,6 +49,7 @@ public class WorkingData {
         containerGroupMap = new HashMap<>();
         weightGroupMap = new HashMap<>();
         yardContainerMap = new HashMap<>();
+        groupWeightNumMap = new HashMap<>();
         stowMoveMap = new HashMap<>();
         weightResultMap = new HashMap<>();
         stowResultList = new ArrayList<>();
@@ -93,11 +92,12 @@ public class WorkingData {
         }
         //初始化重量等级划分结果
         if (StowDomain.THROUGH_NO.equals(vesselContainer.getThroughFlag())) {
+            WeightResult weightResult = new WeightResult(vesselContainer.getvLocation());
             if (bayNo % 2 == 0) { //大倍位
-                weightResultMap.put(new VMPosition(bayNo - 1, rowNo, tierNo).getVLocation(), new WeightResult(vesselContainer.getvLocation()));
-                weightResultMap.put(new VMPosition(bayNo + 1, rowNo, tierNo).getVLocation(), new WeightResult(vesselContainer.getvLocation()));
+                weightResultMap.put(new VMPosition(bayNo - 1, rowNo, tierNo).getVLocation(), weightResult);
+                weightResultMap.put(new VMPosition(bayNo + 1, rowNo, tierNo).getVLocation(), weightResult);
             } else {
-                weightResultMap.put(vmPosition.getVLocation(), new WeightResult(vesselContainer.getvLocation()));
+                weightResultMap.put(vmPosition.getVLocation(), weightResult);
             }
         }
     }
@@ -107,6 +107,10 @@ public class WorkingData {
             return vesselContainerMap.get(vmSlot.getVmPosition().getVLocation());
         }
         return null;
+    }
+
+    public Set<VesselContainer> getAllVesselContainers() {
+        return new HashSet<>(vesselContainerMap.values());
     }
 
     public WeightResult getWeightResultByVMSlot(VMSlot vmSlot) {
@@ -124,12 +128,20 @@ public class WorkingData {
         return containerGroupMap.get(groupId);
     }
 
+    public List<ContainerGroup> getAllContainerGroups() {
+        return new ArrayList<>(containerGroupMap.values());
+    }
+
     public void addWeightGroup(WeightGroup weightGroup) {
         weightGroupMap.put(weightGroup.getWeightId(), weightGroup);
     }
 
     public WeightGroup getWeightGroupById(Long weightGroupId) {
         return weightGroupMap.get(weightGroupId);
+    }
+
+    public List<WeightGroup> getAllWeightGroups() {
+        return new ArrayList<>(weightGroupMap.values());
     }
 
     public void addYardContainer(YardContainer yardContainer) {
@@ -139,6 +151,35 @@ public class WorkingData {
     public YardContainer getYardContainerByContainerId(Long containerId) {
         return yardContainerMap.get(containerId);
     }
+
+    public List<YardContainer> getAllCanStowContainerList() {
+        List<YardContainer> yardContainerList = new ArrayList<>();
+        for (Map.Entry<Long, YardContainer> entry : yardContainerMap.entrySet()) {
+            if (StowDomain.YES.equals(entry.getValue().getStowageFlag())) {
+                yardContainerList.add(entry.getValue());
+            }
+        }
+        return yardContainerList;
+    }
+
+    //-----------中间分析生成的数据-----------
+
+    public Map<Long, Map<Integer, Integer>> getGroupWeightNumMap() {
+        return groupWeightNumMap;
+    }
+
+    public void setGroupWeightNumMap(Map<Long, Map<Integer, Integer>> groupWeightNumMap) {
+        this.groupWeightNumMap = groupWeightNumMap;
+    }
+
+    public Map<String, StowMove> getStowMoveMap() {
+        return stowMoveMap;
+    }
+
+    public void setStowMoveMap(Map<String, StowMove> stowMoveMap) {
+        this.stowMoveMap = stowMoveMap;
+    }
+
 
     //-----------结果输出对象基础方法-----------
 

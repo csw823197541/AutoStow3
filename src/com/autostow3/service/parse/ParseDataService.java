@@ -221,8 +221,8 @@ public class ParseDataService {
                     Integer tailLightCntBayNo = smartStowageConfigurationInfo.getHatchTail();
                     stowConfig.setTailLightCntBayNo(tailLightCntBayNo);
                     //尾舱划分轻的情况下，对应这几个舱的甲板下是否划重箱，默认为false
-                    String tailBayHatchWeightCntFlag = smartStowageConfigurationInfo.getUnderDeckPriority() ? StowDomain.YES : StowDomain.NO;
-                    stowConfig.setTailBayHatchWeightCntFlag(tailBayHatchWeightCntFlag);
+                    String tailBayBelowWeightCntFlag = smartStowageConfigurationInfo.getUnderDeckPriority() ? StowDomain.YES : StowDomain.NO;
+                    stowConfig.setTailBayBelowWeightCntFlag(tailBayBelowWeightCntFlag);
                     workingData.setStowConfig(stowConfig);
                 }
             } catch (Exception e) {
@@ -256,10 +256,16 @@ public class ParseDataService {
                 String overrunCd = smartVesselContainerInfo.getOvlmtcd(); //超限箱标记：Y/N
                 overrunCd = StringUtil.isNotBlank(overrunCd) ? !"N".equals(overrunCd) ? StowDomain.YES : StowDomain.NO : StowDomain.NO;
                 String fixWeightLevelFlag = smartVesselContainerInfo.getFixedWeightlevel() ? StowDomain.YES : StowDomain.NO;
+                Long groupId = smartVesselContainerInfo.getGroupId();
                 try {
                     workingData = allRuntimeData.getWorkingDataByBerthId(berthId);
                     if (workingData != null) {
                         VesselContainer vesselContainer = new VesselContainer(vLocation, dlType);
+                        if (groupId == null) {
+                            logger.logError("预配位没有属性组Id");
+                            continue;
+                        }
+                        vesselContainer.setGroupId(groupId);
                         vesselContainer.setThroughFlag(throughFlag);
                         vesselContainer.setVpcCntId(vpcCntId);
                         vesselContainer.setBerthId(berthId);
@@ -319,8 +325,8 @@ public class ParseDataService {
                 workingData = allRuntimeData.getWorkingDataByBerthId(berthId);
                 if (workingData != null) {
                     WeightGroup weightGroup = new WeightGroup(berthId, smartWeightGroupInfo.getWeightId());
-                    weightGroup.setMinWeight(smartWeightGroupInfo.getMinWeight());
-                    weightGroup.setMaxWeight(smartWeightGroupInfo.getMaxWeight());
+                    weightGroup.setMinWeight(smartWeightGroupInfo.getMinWeight() * 1000);
+                    weightGroup.setMaxWeight(smartWeightGroupInfo.getMaxWeight() * 1000);
                     workingData.addWeightGroup(weightGroup);
                 }
             } catch (Exception e) {
@@ -344,7 +350,7 @@ public class ParseDataService {
                     yardContainer.setAreaNo(smartYardContainerInfo.getAreaNo());
                     String yLocation = smartYardContainerInfo.getYlocation();
                     yardContainer.setyLocation(yLocation);
-                    yardContainer.setType(smartYardContainerInfo.getCntType());
+                    yardContainer.setType(smartYardContainerInfo.getCtypeCd());
                     yardContainer.setSize(smartYardContainerInfo.getCszCsizecd());
                     yardContainer.setDstPort(smartYardContainerInfo.getDstPort());
                     yardContainer.setWeight(smartYardContainerInfo.getWeight());
@@ -384,7 +390,6 @@ public class ParseDataService {
             }
         }
     }
-
 
 
     private void parseStowVesselContainer(List<SmartVesselContainerInfo> smartVesselContainerInfoList, AllRuntimeData allRuntimeData) {

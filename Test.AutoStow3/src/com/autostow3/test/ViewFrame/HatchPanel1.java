@@ -4,7 +4,11 @@ package com.autostow3.test.ViewFrame;
 import com.autostow3.data.AllRuntimeData;
 import com.autostow3.data.single.StructureData;
 import com.autostow3.data.single.WorkingData;
+import com.autostow3.model.domain.StowDomain;
+import com.autostow3.model.result.WeightResult;
+import com.autostow3.model.stow.VesselContainer;
 import com.autostow3.model.vessel.VMBay;
+import com.autostow3.model.vessel.VMRow;
 import com.autostow3.model.vessel.VMSlot;
 
 import javax.swing.*;
@@ -43,16 +47,14 @@ public class HatchPanel1 extends JPanel {
 
     private JPanel bayPanel;
 
-//    private Map<String, java.util.List<WorkMove>> workMoveMap;
 
     public HatchPanel1(Long berthId, Long hatchId, String dlType, AllRuntimeData allRuntimeData) {
         this.berthId = berthId;
         this.hatchId = hatchId;
         this.dlType = dlType;
         this.allRuntimeData = allRuntimeData;
-//        workingData = allRuntimeData.getWorkingDataByBerthId(berthId);
-//        structureData = allRuntimeData.getStructDataByVesselCode(workingData.getVmSchedule().getVesselCode());
-//        this.workMoveMap = workingData.getWorkMoveMap();
+        workingData = allRuntimeData.getWorkingDataByBerthId(berthId);
+        structureData = allRuntimeData.getStructDataByVesselCode(workingData.getVmSchedule().getVesselCode());
         initComponents();
     }
 
@@ -129,8 +131,8 @@ public class HatchPanel1 extends JPanel {
     }
 
     private void initBay(JPanel jPanel, String info) {
-//        java.util.List<VMBay> vmBayList = structureData.getVMBayListByHatchId(hatchId);
-//        java.util.List<Integer> moBayNos = structureData.getVMHatchByHatchId(hatchId).getBayNos();
+        java.util.List<VMBay> vmBayList = structureData.getVMBayListByHatchId(hatchId);
+        java.util.List<Integer> moBayNos = structureData.getVMHatchByHatchId(hatchId).getBayNos();
 
         this.remove(bayPanel);
 
@@ -143,24 +145,24 @@ public class HatchPanel1 extends JPanel {
         gridBagConstraints2.fill = GridBagConstraints.BOTH;
         this.add(jPanel, gridBagConstraints2);
 
-//        for (VMBay vmBay : vmBayList) {
-//            GridBagConstraints gridBagConstraints = new GridBagConstraints();
-//            if (vmBay.getBayNo().equals(moBayNos.get(0))) {//第一个贝
-//                gridBagConstraints.gridx = 0;
-//            } else {
-//                gridBagConstraints.gridx = 1;
-//            }
-//            if (vmBay.getAboveOrBelow().equals(StowDomain.BOARD_ABOVE)) {
-//                gridBagConstraints.gridy = 0;
-//            } else {
-//                gridBagConstraints.gridy = 1;
-//            }
-//            gridBagConstraints.fill = GridBagConstraints.BOTH;
-//            gridBagConstraints.weightx = 1;
-//            gridBagConstraints.weighty = 1;
-//
-//            jPanel.add(initPanel(vmBay, info), gridBagConstraints);
-//        }
+        for (VMBay vmBay : vmBayList) {
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            if (vmBay.getBayNo().equals(moBayNos.get(0))) {//第一个贝
+                gridBagConstraints.gridx = 0;
+            } else {
+                gridBagConstraints.gridx = 1;
+            }
+            if (vmBay.getAboveOrBelow().equals(StowDomain.BOARD_ABOVE)) {
+                gridBagConstraints.gridy = 0;
+            } else {
+                gridBagConstraints.gridy = 1;
+            }
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.weightx = 1;
+            gridBagConstraints.weighty = 1;
+
+            jPanel.add(initPanel(vmBay, info), gridBagConstraints);
+        }
 
         this.validate();
         this.repaint();
@@ -173,8 +175,8 @@ public class HatchPanel1 extends JPanel {
         JPanel jPanel = new JPanel();
         String panelBorderTitle = vmBay.getBayNo() + vmBay.getAboveOrBelow().substring(0, 1) + "-" + bayId;
         jPanel.setBorder(BorderFactory.createTitledBorder(panelBorderTitle));
-//        java.util.List<Integer> rowSeqList = structureData.getRowSeqListByOddOrEven(bayId, StowDomain.ROW_SEQ_EVEN_ODD);
-//        java.util.List<Integer> hatchRowSeqList = structureData.getRowSeqListBySeaOrLand(hatchId,StowDomain.ROW_SEQ_EVEN_ODD);
+        java.util.List<Integer> rowSeqList = structureData.getRowSeqListByOddOrEven(bayId, StowDomain.ROW_SEQ_EVEN_ODD);
+        java.util.List<Integer> hatchRowSeqList = structureData.getRowSeqListBySeaOrLand(hatchId, StowDomain.ROW_SEQ_EVEN_ODD);
         int maxTierNo = vmBay.getMaxTier();
         int minTierNo = vmBay.getMinTier();
         int tierCount = (maxTierNo - minTierNo) / 2 + 1;
@@ -182,82 +184,82 @@ public class HatchPanel1 extends JPanel {
         jPanel.setLayout(gridBagLayout);
 
         //添加箱信息
-//        for (int i = 0; i <hatchRowSeqList.size() + 1; i++) {
-//            for (int j = 0; j < tierCount + 1; j++) {
-//                GridBagConstraints gridBagConstraints = new GridBagConstraints();
-//                gridBagConstraints.gridx = i;
-//                gridBagConstraints.gridy = j;
-//                gridBagConstraints.fill = GridBagConstraints.BOTH;
-//                gridBagConstraints.weightx = 1;
-//                gridBagConstraints.weighty = 1;
-//
-//                int curTierNo = maxTierNo - 2 * j;
-//                JLabel jLabel = null;
-//                if(vmBay.getAboveOrBelow().equals(StowDomain.BOARD_ABOVE)){
-//                    //第0列添加层号信息
-//                    if (i == 0) {
-//                        if (j == tierCount) {   //左下角
-//                            jLabel = getSideLabel("左下角");
-//                        } else {//显示层号
-//                            jLabel = getSideLabel(curTierNo + "");
-//                            jLabel.setOpaque(true);
-//                        }
-//                    } else {
-//                        if (j == tierCount) { //最后一排,显示排号
-//                            int rowNo = hatchRowSeqList.get(i - 1);
-//                            if(rowSeqList.contains(rowNo)){
-//                                jLabel = getSideLabel(rowNo + "");
-//                            }else{
-//                                jLabel = new JLabel("");
-//                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
-//                            }
-//                        } else {
-//                            int rowNo = hatchRowSeqList.get(i - 1);
-//                            VMRow row = structureData.getVMBayByBayId(bayId).getVMRowByRowNo(rowNo);
-//                            if(row != null){
-//                                VMSlot vmSlot = row.getVMSlot(curTierNo);
-//                                jLabel = getJLabel(vmSlot, info);
-//                            }else{
-//                                jLabel = new JLabel("");
-//                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
-//                            }
-//                        }
-//
-//                    }
-//                }else if(vmBay.getAboveOrBelow().equals(StowDomain.BOARD_BELOW)) {
-//                    if (i == 0) {
-//                        if (j == 0) {
-//                            jLabel = getSideLabel("左上角");
-//                        } else{//显示层号
-//                            jLabel = getSideLabel((curTierNo+2) + "");
-//                            jLabel.setOpaque(true);
-//                        }
-//                    } else {
-//                        if (j == 0) { //第一排,显示排号
-//                            int rowNo = hatchRowSeqList.get(i-1);
-//                            if (rowSeqList.contains(rowNo)) {
-//                                jLabel = getSideLabel(rowNo + "");
-//                            } else {
-//                                jLabel = new JLabel("");
-//                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
-//                            }
-//                        } else {
-//                            int rowNo = hatchRowSeqList.get(i-1);
-//                            VMRow row = structureData.getVMBayByBayId(bayId).getVMRowByRowNo(rowNo);
-//                            if (row != null) {
-//                                VMSlot vmSlot = row.getVMSlot(curTierNo+2);
-//                                jLabel = getJLabel(vmSlot, info);
-//                            } else {
-//                                jLabel = new JLabel("");
-//                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                jPanel.add(jLabel, gridBagConstraints);
-//            }
-//        }
+        for (int i = 0; i < hatchRowSeqList.size() + 1; i++) {
+            for (int j = 0; j < tierCount + 1; j++) {
+                GridBagConstraints gridBagConstraints = new GridBagConstraints();
+                gridBagConstraints.gridx = i;
+                gridBagConstraints.gridy = j;
+                gridBagConstraints.fill = GridBagConstraints.BOTH;
+                gridBagConstraints.weightx = 1;
+                gridBagConstraints.weighty = 1;
+
+                int curTierNo = maxTierNo - 2 * j;
+                JLabel jLabel = null;
+                if (vmBay.getAboveOrBelow().equals(StowDomain.BOARD_ABOVE)) {
+                    //第0列添加层号信息
+                    if (i == 0) {
+                        if (j == tierCount) {   //左下角
+                            jLabel = getSideLabel("左下角");
+                        } else {//显示层号
+                            jLabel = getSideLabel(curTierNo + "");
+                            jLabel.setOpaque(true);
+                        }
+                    } else {
+                        if (j == tierCount) { //最后一排,显示排号
+                            int rowNo = hatchRowSeqList.get(i - 1);
+                            if (rowSeqList.contains(rowNo)) {
+                                jLabel = getSideLabel(rowNo + "");
+                            } else {
+                                jLabel = new JLabel("");
+                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
+                            }
+                        } else {
+                            int rowNo = hatchRowSeqList.get(i - 1);
+                            VMRow row = structureData.getVMBayByBayId(bayId).getVMRowByRowNo(rowNo);
+                            if (row != null) {
+                                VMSlot vmSlot = row.getVMSlot(curTierNo);
+                                jLabel = getJLabel(vmSlot, info);
+                            } else {
+                                jLabel = new JLabel("");
+                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
+                            }
+                        }
+
+                    }
+                } else if (vmBay.getAboveOrBelow().equals(StowDomain.BOARD_BELOW)) {
+                    if (i == 0) {
+                        if (j == 0) {
+                            jLabel = getSideLabel("左上角");
+                        } else {//显示层号
+                            jLabel = getSideLabel((curTierNo + 2) + "");
+                            jLabel.setOpaque(true);
+                        }
+                    } else {
+                        if (j == 0) { //第一排,显示排号
+                            int rowNo = hatchRowSeqList.get(i - 1);
+                            if (rowSeqList.contains(rowNo)) {
+                                jLabel = getSideLabel(rowNo + "");
+                            } else {
+                                jLabel = new JLabel("");
+                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
+                            }
+                        } else {
+                            int rowNo = hatchRowSeqList.get(i - 1);
+                            VMRow row = structureData.getVMBayByBayId(bayId).getVMRowByRowNo(rowNo);
+                            if (row != null) {
+                                VMSlot vmSlot = row.getVMSlot(curTierNo + 2);
+                                jLabel = getJLabel(vmSlot, info);
+                            } else {
+                                jLabel = new JLabel("");
+                                jLabel.setPreferredSize(new Dimension(squareLength, squareLength));
+                            }
+                        }
+                    }
+                }
+
+                jPanel.add(jLabel, gridBagConstraints);
+            }
+        }
         return jPanel;
 
     }
@@ -274,66 +276,60 @@ public class HatchPanel1 extends JPanel {
             jLabel.setOpaque(true);
             jLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-//            VesselContainer vmContainer = workingData.getVMContainerByVMSlot(vmSlot, dlType);
-//            java.util.List<WorkMove> workMoveList = workMoveMap.get(resultName);
-//            WorkMove workMove = null;
-//            if(vmContainer != null){
-//                for(WorkMove wm :workMoveList){
-//                    if(wm.getHatchId().equals(vmContainer.getHatchId())
-//                            && wm.getVmSlotSet().contains(vmSlot)
-//                            && dlType.equals(wm.getDlType())){
-//                        workMove = wm;
-//                    }
-//                }
-//            }
-//            if (vmContainer == null) {
-//                jLabel.setBackground(colorEmptySlot);
-//            } else {
-//                if (StowDomain.YES.equals(vmContainer.getCwoManualWi())) {
-//                    jLabel.setBackground(colorThrough);
-//                }else {
-//                    if (vmContainer.getSize().startsWith("4")) {
-//                        jLabel.setBackground(color40);
-//                    }
-//                    if (vmContainer.getSize().startsWith("2")) {
-//                        jLabel.setBackground(color20);
-//                    }
-//                    //状态显示
-//                    if(!(vmContainer.getDgCd() == null|| vmContainer.getDgCd().equals(StowDomain.DG_NORMAL))){
-//                        jLabel.setBackground(danger);
-//                    }
-//                }
-//
-//                //根据info显示具体数据
-//                if(workMove != null){
-//                    StringBuilder str = new StringBuilder();
-//                    String order = workMove.getMoveOrder() != null ? workMove.getMoveOrder().toString() : "";
-//                    String workFlow = workMove.getWorkFlow() != null ? workMove.getWorkFlow().toLowerCase() : "";
-//                    String yLocation = "";
-//                    String dstPort = vmContainer.getGroupId() != null ? String.valueOf(vmContainer.getGroupId()) : "";
-//                    String sentSeq = "";
-//                    if (moveOrder.equals(info)) {
-//                        jLabel.setText(order + "-" + workFlow);
-//                    } else if (HatchPanel1.yLocation.equals(info)) {
-//                        StringBuilder sb = new StringBuilder();
-//                        sb.append("<html><div>").append(sentSeq).append("<br/>")
-//                                .append("o:").append(yLocation).append("<br/>")
-//                                .append("</div></html>");
-//                        jLabel.setText(sb.toString());
-//                    } else if (HatchPanel1.dstPort.equals(info)) {
-//                        jLabel.setText(dstPort);
-//                    } else if (HatchPanel1.sentSeq.equals(info)) {
-//                        jLabel.setText(sentSeq);
-//                    } else { //style='color:#000000;font-size:10px;font-family:宋体;'
-//                        str.append("<html><div>").append(order).append("-").append(workFlow).append("<br/>")
-//                                .append(yLocation).append("<br/>")
-//                                .append(vmContainer.getWeightKg()).append("<br/>")
-////                            .append(vmContainer.getDstPort()).append("<br/>")
-//                                .append("</div></html>");
-//                        jLabel.setText(str.toString());
-//                    }
-//                }
-//            }
+            VesselContainer vmContainer = workingData.getVesselContainerByVMSlot(vmSlot);
+            WeightResult weightResult = workingData.getWeightResultByVMSlot(vmSlot);
+
+            if (vmContainer == null) {
+                jLabel.setBackground(colorEmptySlot);
+            } else {
+                if (StowDomain.THROUGH_YES.equals(vmContainer.getThroughFlag())) {
+                    jLabel.setBackground(colorThrough);
+                } else {
+                    if (vmContainer.getSize().startsWith("4")) {
+                        jLabel.setBackground(color40);
+                    }
+                    if (vmContainer.getSize().startsWith("2")) {
+                        jLabel.setBackground(color20);
+                    }
+                    //状态显示
+                    if (!(vmContainer.getDgCd() == null || vmContainer.getDgCd().equals(StowDomain.DG_NORMAL))) {
+                        jLabel.setBackground(danger);
+                    }
+                }
+
+                //根据info显示具体数据
+                if (weightResult != null) {
+                    StringBuilder str = new StringBuilder();
+                    String order = vmContainer.getMoveOrder() != null ? vmContainer.getMoveOrder().toString() : "";
+                    String workFlow = vmContainer.getWorkFlow() != null ? vmContainer.getWorkFlow().toLowerCase() : "";
+                    String yLocation = "";
+                    String dstPort = vmContainer.getPortCd() != null ? vmContainer.getPortCd() : "";
+                    String sentSeq = "";
+                    String weightSeq = weightResult.getWeightSeq() != null ? String.valueOf(weightResult.getWeightSeq()) : "";
+                    String weight = vmContainer.getWeightKg() != null ? String.valueOf(vmContainer.getWeightKg()) : "";
+                    if (moveOrder.equals(info)) {
+                        jLabel.setText(order + "-" + workFlow);
+                    } else if (HatchPanel1.yLocation.equals(info)) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("<html><div>")
+                                .append(sentSeq).append("<br/>")
+                                .append("o:").append(yLocation).append("<br/>")
+                                .append("</div></html>");
+                        jLabel.setText(sb.toString());
+                    } else if (HatchPanel1.dstPort.equals(info)) {
+                        jLabel.setText(dstPort);
+                    } else if (HatchPanel1.sentSeq.equals(info)) {
+                        jLabel.setText(sentSeq);
+                    } else { //style='color:#000000;font-size:10px;font-family:宋体;'
+                        str.append("<html><div>")
+                                .append("WI:").append(weightSeq).append("<br/>")
+                                .append("Y:").append(yLocation).append("<br/>")
+                                .append("W:").append(weight).append("<br/>")
+                                .append("</div></html>");
+                        jLabel.setText(str.toString());
+                    }
+                }
+            }
 
         }
         return jLabel;
