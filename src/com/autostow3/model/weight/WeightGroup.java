@@ -11,6 +11,11 @@ public class WeightGroup {
     private Double minWeight; //最小重量
     private Double maxWeight; //最大重量
 
+    public WeightGroup(Long berthId, Long weightId) {
+        this.berthId = berthId;
+        this.weightId = weightId;
+    }
+
     public Long getBerthId() {
         return berthId;
     }

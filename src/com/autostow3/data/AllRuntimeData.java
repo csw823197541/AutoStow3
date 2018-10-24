@@ -3,11 +3,9 @@ package com.autostow3.data;
 import com.autostow3.data.single.StructureData;
 import com.autostow3.data.single.WorkingData;
 import com.autostow3.model.log.Logger;
-import com.autostow3.model.stow.YardContainer;
+import com.autostow3.model.stow.Area;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,13 +21,12 @@ public class AllRuntimeData {
     private Map<String, StructureData> structureDataMap; //船舶结构数据，key: vesselCode
 
     //多船共享数据
-    private Map<String, List<YardContainer>> yardContainerMap; //在场箱数据，按箱区存储，<areaNo, List<YardContainer>>
+    private Map<String, Area> areaMap;
 
     public AllRuntimeData() {
         logger = new Logger();
         workingDataMap = new HashMap<>();
         structureDataMap = new HashMap<>();
-        yardContainerMap = new HashMap<>();
     }
 
     public Logger getLogger() {
@@ -52,11 +49,5 @@ public class AllRuntimeData {
         return structureDataMap.get(vesselCode);
     }
 
-    public void addYardContainer(YardContainer yardContainer) {
-        String areaNo = yardContainer.getAreaNo();
-        if (yardContainerMap.get(areaNo) == null) {
-            yardContainerMap.put(areaNo, new ArrayList<YardContainer>());
-        }
-        yardContainerMap.get(areaNo).add(yardContainer);
-    }
+
 }

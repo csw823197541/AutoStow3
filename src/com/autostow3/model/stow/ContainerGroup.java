@@ -10,26 +10,23 @@ public class ContainerGroup {
     private Long groupId; //属性组
     private String portCd; //卸货港
     private String size; //箱尺寸
+    private String type; //箱型
     private String efFlag; //空/重标记 （Y/N）
     private String rfFlag; //冷藏箱标记 (Y/N)
     private String isHeight; //箱高(高箱或平箱) (Y/N)
-    private String type; //箱型
     private String dgCd; //危险品代码
+
+    public ContainerGroup(Long berthId, Long groupId) {
+        this.berthId = berthId;
+        this.groupId = groupId;
+    }
 
     public Long getBerthId() {
         return berthId;
     }
 
-    public void setBerthId(Long berthId) {
-        this.berthId = berthId;
-    }
-
     public Long getGroupId() {
         return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
     }
 
     public String getPortCd() {

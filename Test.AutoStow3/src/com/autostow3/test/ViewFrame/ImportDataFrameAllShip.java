@@ -61,7 +61,7 @@ public class ImportDataFrameAllShip extends JFrame {
                 if (GlobalData.selectedBerthId != null) {
 
                     ParseDataService parseDataService = new ParseDataService();
-                    allRuntimeData = parseDataService.parseAllRuntimeData(smartStowImportData);
+                    allRuntimeData = parseDataService.parseAllRuntimeDataByWeight(smartStowImportData);
 
                     WeightService weightService = new WeightService();
                     weightService.doWeightLevel(allRuntimeData, GlobalData.selectedBerthId);
@@ -80,7 +80,7 @@ public class ImportDataFrameAllShip extends JFrame {
                 if (GlobalData.selectedBerthId != null) {
 
                     ParseDataService parseDataService = new ParseDataService();
-                    allRuntimeData = parseDataService.parseAllRuntimeData(smartStowImportData);
+                    allRuntimeData = parseDataService.parseAllRuntimeDataByWeight(smartStowImportData);
 
                     StowService stowService = new StowService();
                     stowService.doAutoStow(allRuntimeData, GlobalData.selectedBerthId);
@@ -194,12 +194,15 @@ public class ImportDataFrameAllShip extends JFrame {
         yardCntInfoFrame.setVisible(true);
         voyCranePane.add(yardCntInfoFrame);
         BaseFrame groupInfoFrame = new BaseFrame("属性组信息", SmartContainerGroupInfo.class, smartStowImportData.getSmartContainerGroupInfoList());
+        groupInfoFrame.setSize(GlobalData.width - 50, GlobalData.height - 600);
         groupInfoFrame.setVisible(true);
         voyCranePane.add(groupInfoFrame);
         BaseFrame weightInfoFrame = new BaseFrame("重量组信息", SmartWeightGroupInfo.class, smartStowImportData.getSmartWeightGroupInfoList());
+        weightInfoFrame.setSize(GlobalData.width - 50, GlobalData.height - 600);
         weightInfoFrame.setVisible(true);
         voyCranePane.add(weightInfoFrame);
         BaseFrame portGroupInfoFrame = new BaseFrame("港口组信息", SmartPortGroupInfo.class, smartStowImportData.getSmartPortGroupInfoList());
+        portGroupInfoFrame.setSize(GlobalData.width - 50, GlobalData.height - 600);
         portGroupInfoFrame.setVisible(true);
         voyCranePane.add(portGroupInfoFrame);
 

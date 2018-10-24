@@ -17,9 +17,9 @@ public class WeightService {
             WeightProcess weightProcess = new WeightProcess(allRuntimeData, berthId);
             weightProcess.processWeightLevel();
         } catch (Exception e) {
-            workingData.getLogger().logError("对船舶(berthId:" + berthId + ")进行自动配载时发生异常！");
+            workingData.getLogger().logError("对船舶(berthId:" + berthId + ")进行重量等级划分过程中发生异常！");
             e.printStackTrace();
         }
-        workingData.getLogger().logInfo("船舶(berthId:" + berthId + ")自动配载结束。");
+        workingData.getLogger().logInfo("船舶(berthId:" + berthId + ")重量等级划分结束。");
     }
 }

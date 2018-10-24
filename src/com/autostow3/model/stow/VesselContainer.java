@@ -11,19 +11,20 @@ public class VesselContainer {
     private Long vpcCntId; //箱指令唯一编号(指令模块专用)
 
     private String vLocation; //船箱位
-    private String type; //箱型，决定了高度，以及其他一些属性
-    private String size; //箱尺寸
     private String dlType; //装卸标识
     private String containerNo; //箱号，可空
     private Long groupId;       //属性组
     private Long weightId;       //重量组
     private Long cntWorkTime; //人工设置的箱子作业效率，时间（s）
-    private String lockFlag; //预配位是否锁住标记
+    private String lockFlag; //预配位是否锁住标记，解析生成
     private String fixedWeightLevel; //是否指定重量等级
-
     private String throughFlag; //过境箱标记
+
+    private String type; //箱型，决定了高度，以及其他一些属性
+    private String size; //箱尺寸
+    private String portCd; //卸货港
+    private String efFlag; //E or F，箱空重
     private String rfFlag;	//冷藏箱标记
-    private String efFlag; //empty or full，箱空重
     private String dgCd; //危险品代码
     private String isHeight; // 是否高箱
     private String cntHeight; //箱子的具体高度
@@ -48,7 +49,7 @@ public class VesselContainer {
     public boolean equals(Object obj) {
         if (obj instanceof VesselContainer) {
             VesselContainer vesselContainer = (VesselContainer) obj;
-            return dlType.equals(vesselContainer.getDlType()) && vLocation.equals(vesselContainer.getvLocation());
+            return vLocation.equals(vesselContainer.getvLocation());
         } else {
             return false;
         }
@@ -256,5 +257,13 @@ public class VesselContainer {
 
     public void setFixedWeightLevel(String fixedWeightLevel) {
         this.fixedWeightLevel = fixedWeightLevel;
+    }
+
+    public String getPortCd() {
+        return portCd;
+    }
+
+    public void setPortCd(String portCd) {
+        this.portCd = portCd;
     }
 }

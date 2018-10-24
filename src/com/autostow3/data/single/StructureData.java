@@ -45,7 +45,7 @@ public class StructureData {
         Collections.sort(vmHatchList, new Comparator<VMHatch>() {
             @Override
             public int compare(VMHatch o1, VMHatch o2) {
-                return o1.getHatchId().compareTo(o2.getHatchId());
+                return o1.getHatchSeq().compareTo(o2.getHatchSeq());
             }
         });
         return vmHatchList;
@@ -170,6 +170,18 @@ public class StructureData {
             maxTierNo = vmBay.getMaxTier() > maxTierNo ? vmBay.getMaxTier() : maxTierNo;
         }
         return maxTierNo;
+    }
+
+    public Integer getMinTierNoByHatchIdAndBoard(Long hatchId, String board) {
+        int minTierNo = 1000;
+        List<VMBay> vmBayList = this.getVMBayListByHatchId(hatchId);
+        for (VMBay vmBay : vmBayList) {
+            if (vmBay.getAboveOrBelow().equals(board)) {
+                int min = vmBay.getMinTier();
+                minTierNo = min < minTierNo ? min : minTierNo;
+            }
+        }
+        return minTierNo;
     }
 
     public VMSlot getPairVMSlot(VMSlot vmSlot) {

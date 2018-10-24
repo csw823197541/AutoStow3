@@ -13,6 +13,9 @@ public class VMRow {
     private String bayKey;
     private Integer rowNo;
 
+    private Double maxWeight20;//小倍重量负荷
+    private Double maxWeight40;// 大倍重量负荷
+
     private Integer topTierNo;
     private Integer bottomTierNo;
 
@@ -41,6 +44,22 @@ public class VMRow {
 
     public Integer getRowNo() {
         return rowNo;
+    }
+
+    public Double getMaxWeight20() {
+        return maxWeight20;
+    }
+
+    public void setMaxWeight20(Double maxWeight20) {
+        this.maxWeight20 = maxWeight20;
+    }
+
+    public Double getMaxWeight40() {
+        return maxWeight40;
+    }
+
+    public void setMaxWeight40(Double maxWeight40) {
+        this.maxWeight40 = maxWeight40;
     }
 
     public Integer getTopTierNo() {

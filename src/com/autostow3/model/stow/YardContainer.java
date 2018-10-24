@@ -1,5 +1,6 @@
 package com.autostow3.model.stow;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,6 @@ import java.util.List;
 public class YardContainer {
 
     private Long berthId; //靠泊ID
-    private Long voyageId; //航次ID
     private Long containerId; //唯一箱id
     private String containerNo; //箱号
     private String areaNo; //箱所在箱区号
@@ -25,28 +25,25 @@ public class YardContainer {
     private String UnNo; //危险品联合国编号
     private String isHeight; // 是否高箱
     private String heightCd; //箱高代码
+
     private String stowageFlag; //是否可配载
     private String cntType; //箱子状态，DOC表示资料箱子
+    private Integer ascWorkCntTime; //ASC作业该箱子的时间，理解成由箱区到支架上的时间
 
     private Date planStartWorkTime; //计划开始作业时间
     private Date planEndWorkTime; //计划结束作业时间
     private Integer workPlanCntNumber; //该箱子上面压着的的箱子数量
     private List<Long> wokPlanCntIdList; //该箱子上面压着的的箱子的箱Id,可以找到在场箱具体信息
 
+    public YardContainer(Long berthId, Long containerId, String containerNo) {
+        this.berthId = berthId;
+        this.containerId = containerId;
+        this.containerNo = containerNo;
+        wokPlanCntIdList = new ArrayList<>();
+    }
+
     public Long getBerthId() {
         return berthId;
-    }
-
-    public void setBerthId(Long berthId) {
-        this.berthId = berthId;
-    }
-
-    public Long getVoyageId() {
-        return voyageId;
-    }
-
-    public void setVoyageId(Long voyageId) {
-        this.voyageId = voyageId;
     }
 
     public Long getContainerId() {
@@ -59,10 +56,6 @@ public class YardContainer {
 
     public String getContainerNo() {
         return containerNo;
-    }
-
-    public void setContainerNo(String containerNo) {
-        this.containerNo = containerNo;
     }
 
     public String getAreaNo() {
@@ -207,5 +200,13 @@ public class YardContainer {
 
     public void setWokPlanCntIdList(List<Long> wokPlanCntIdList) {
         this.wokPlanCntIdList = wokPlanCntIdList;
+    }
+
+    public Integer getAscWorkCntTime() {
+        return ascWorkCntTime;
+    }
+
+    public void setAscWorkCntTime(Integer ascWorkCntTime) {
+        this.ascWorkCntTime = ascWorkCntTime;
     }
 }
