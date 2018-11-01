@@ -6,7 +6,7 @@ package com.autostow3.model.domain;
  */
 public class DefaultValue {
     public static final String STOW_VERSION = "AutoStow3.18.8.21";
-    public static boolean outputLogToConsole = false;
+    public static boolean outputLogToConsole = true;
 
     public static Integer aboveWeightCntTier = 1;
 }

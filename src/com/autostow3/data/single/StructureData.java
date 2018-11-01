@@ -88,6 +88,12 @@ public class StructureData {
             if (vmBay.getHatchId().equals(hatchId))
                 vmBayList.add(vmBay);
         }
+        Collections.sort(vmBayList, new Comparator<VMBay>() {
+            @Override
+            public int compare(VMBay o1, VMBay o2) {
+                return o1.getBayKey().compareTo(o2.getBayKey());
+            }
+        });
         return vmBayList;
     }
 

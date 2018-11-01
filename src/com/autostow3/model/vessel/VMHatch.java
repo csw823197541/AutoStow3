@@ -56,13 +56,11 @@ public class VMHatch {
 
     public Integer getBayNo1() {
         List<Integer> bayNoList = getBayNos();
-        Collections.sort(bayNoList);
         return bayNoList.get(0);
     }
 
     public Integer getBayNo2() {
         List<Integer> bayNoList = getBayNos();
-        Collections.sort(bayNoList);
         if (bayNoList.size() == 2) {
             return bayNoList.get(1);
         }
@@ -80,7 +78,9 @@ public class VMHatch {
     }
 
     public List<Integer> getBayNos() {
-        return new ArrayList<>(bayNos);
+        List<Integer> bayNoList = new ArrayList<>(bayNos);
+        Collections.sort(bayNoList);
+        return bayNoList;
     }
 
     public List<Integer> getAllBayNos() {

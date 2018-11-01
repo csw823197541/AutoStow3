@@ -15,6 +15,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by CarloJones on 2018/7/11.
@@ -44,6 +48,13 @@ public class HatchPanel1 extends JPanel {
     private Color colorW = Color.ORANGE;
     private Color colorSent = new Color(0xFDFF22);
     private Color[] colors = {Color.ORANGE, Color.RED, Color.GREEN};
+
+    private Color[] groupColors = new Color[]{new Color(0xCD00CD), new Color(0x00FFFF), new Color(0xFF0325), new Color(0x9F79EE),
+            new Color(0x21FE06), new Color(0xFFFF22), new Color(0xFF00FF), new Color(0x9AA309), new Color(0x120DFF),
+            new Color(0x8B0000), new Color(0x1EC6CD), new Color(0x87CEFA), new Color(0xEE0000), new Color(0xAADDDD),
+            new Color(0x9D2F4A), new Color(0xE3BA40), new Color(0x050505)};//16部桥机的颜色
+
+    private Map<Long, Color> groupColorMap = new HashMap<>();
 
     private JPanel bayPanel;
 
@@ -125,6 +136,11 @@ public class HatchPanel1 extends JPanel {
         //倍位图panel
         bayPanel = new JPanel();
         this.add(bayPanel);
+
+        int i = 0;
+        for (Long groupId : workingData.getGroupWeightNumMap().keySet()) {
+            groupColorMap.put(groupId, groupColors[i++]);
+        }
 
         initBay(new JPanel(), "");
 
@@ -282,51 +298,61 @@ public class HatchPanel1 extends JPanel {
             if (vmContainer == null) {
                 jLabel.setBackground(colorEmptySlot);
             } else {
-                if (StowDomain.THROUGH_YES.equals(vmContainer.getThroughFlag())) {
-                    jLabel.setBackground(colorThrough);
-                } else {
-                    if (vmContainer.getSize().startsWith("4")) {
-                        jLabel.setBackground(color40);
-                    }
-                    if (vmContainer.getSize().startsWith("2")) {
-                        jLabel.setBackground(color20);
-                    }
-                    //状态显示
-                    if (!(vmContainer.getDgCd() == null || vmContainer.getDgCd().equals(StowDomain.DG_NORMAL))) {
-                        jLabel.setBackground(danger);
+                boolean t = true;
+                if (vmContainer.getSize().startsWith("4")) {
+                    if (!structureData.getVMHatchByHatchId(vmContainer.getHatchId()).getBayNo1().equals(vmSlot.getVmPosition().getBayNo())) {
+                        t = false;
                     }
                 }
+                if (t) {
+                    if (StowDomain.THROUGH_YES.equals(vmContainer.getThroughFlag())) {
+                        jLabel.setBackground(colorThrough);
+                    } else {
+//                        if (vmContainer.getSize().startsWith("4")) {
+//                            jLabel.setBackground(color40);
+//                        }
+//                        if (vmContainer.getSize().startsWith("2")) {
+//                            jLabel.setBackground(color20);
+//                        }
+                        jLabel.setBackground(groupColorMap.get(vmContainer.getGroupId()));
+                        //状态显示
+                        if (!(vmContainer.getDgCd() == null || vmContainer.getDgCd().equals(StowDomain.DG_NORMAL))) {
+                            jLabel.setBackground(danger);
+                        }
+                    }
 
-                //根据info显示具体数据
-                if (weightResult != null) {
-                    StringBuilder str = new StringBuilder();
-                    String order = vmContainer.getMoveOrder() != null ? vmContainer.getMoveOrder().toString() : "";
-                    String workFlow = vmContainer.getWorkFlow() != null ? vmContainer.getWorkFlow().toLowerCase() : "";
-                    String yLocation = "";
-                    String dstPort = vmContainer.getPortCd() != null ? vmContainer.getPortCd() : "";
-                    String sentSeq = "";
-                    String weightSeq = weightResult.getWeightSeq() != null ? String.valueOf(weightResult.getWeightSeq()) : "";
-                    String weight = vmContainer.getWeightKg() != null ? String.valueOf(vmContainer.getWeightKg()) : "";
-                    if (moveOrder.equals(info)) {
-                        jLabel.setText(order + "-" + workFlow);
-                    } else if (HatchPanel1.yLocation.equals(info)) {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("<html><div>")
-                                .append(sentSeq).append("<br/>")
-                                .append("o:").append(yLocation).append("<br/>")
-                                .append("</div></html>");
-                        jLabel.setText(sb.toString());
-                    } else if (HatchPanel1.dstPort.equals(info)) {
-                        jLabel.setText(dstPort);
-                    } else if (HatchPanel1.sentSeq.equals(info)) {
-                        jLabel.setText(sentSeq);
-                    } else { //style='color:#000000;font-size:10px;font-family:宋体;'
-                        str.append("<html><div>")
-                                .append("WI:").append(weightSeq).append("<br/>")
-                                .append("Y:").append(yLocation).append("<br/>")
-                                .append("W:").append(weight).append("<br/>")
-                                .append("</div></html>");
-                        jLabel.setText(str.toString());
+                    //根据info显示具体数据
+                    if (weightResult != null) {
+                        StringBuilder str = new StringBuilder();
+                        String order = vmContainer.getMoveOrder() != null ? vmContainer.getMoveOrder().toString() : "";
+                        String workFlow = vmContainer.getWorkFlow() != null ? vmContainer.getWorkFlow().toLowerCase() : "";
+                        String yLocation = "";
+                        String dstPort = vmContainer.getPortCd() != null ? vmContainer.getPortCd() : "";
+                        String sentSeq = "";
+                        String weightSeq = weightResult.getWeightSeq() != null ? String.valueOf(weightResult.getWeightSeq()) : "";
+                        String weight = vmContainer.getWeightKg() != null ? String.valueOf(vmContainer.getWeightKg()) : "";
+                        String groupId = vmContainer.getGroupId() != null ? String.valueOf(vmContainer.getGroupId()) : "";
+                        if (moveOrder.equals(info)) {
+                            jLabel.setText(order + "-" + workFlow);
+                        } else if (HatchPanel1.yLocation.equals(info)) {
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("<html><div>")
+                                    .append(sentSeq).append("<br/>")
+                                    .append("o:").append(yLocation).append("<br/>")
+                                    .append("</div></html>");
+                            jLabel.setText(sb.toString());
+                        } else if (HatchPanel1.dstPort.equals(info)) {
+                            jLabel.setText(dstPort);
+                        } else if (HatchPanel1.sentSeq.equals(info)) {
+                            jLabel.setText(sentSeq);
+                        } else { //style='color:#000000;font-size:10px;font-family:宋体;'
+                            str.append("<html><div>")
+                                    .append("WI:").append(weightSeq).append("<br/>")
+                                    .append("G:").append(groupId).append("<br/>")
+                                    .append("W:").append(weight).append("<br/>")
+                                    .append("</div></html>");
+                            jLabel.setText(str.toString());
+                        }
                     }
                 }
             }

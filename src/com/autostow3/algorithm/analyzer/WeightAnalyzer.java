@@ -75,12 +75,13 @@ public class WeightAnalyzer {
             }
             if (entry.getValue() > n) { //预配数目比在场箱数目大
                 canNotStow = true;
-                logger.logError("属性组(" + workingData.getContainerGroupById(entry.getKey()).toString() + ")的预配数目(" + entry.getValue() + ")比可配在场箱数目(" + n + ")大，缺少可配在场箱，算法无法划分重量等级，请检查预配和可配在场箱！");
+                logger.logError("属性组(" + workingData.getContainerGroupById(entry.getKey()).toString() + ")的预配数目(" + entry.getValue() + ")比可配在场箱数目(" + n + ")大，由于缺少可配在场箱，算法无法划分重量等级，请检查预配和可配在场箱！");
             }
+            logger.logDebug("属性组(" + workingData.getContainerGroupById(entry.getKey()).toString() + ")的预配数目为：" + entry.getValue() + "，可配在场箱数目为：" + n);
         }
         if (canNotStow) {
-            logger.logError("找不到属性组的可配在场箱总共有：" + noneGroupIdList.toString(), !ValidatorUtil.isEmpty(noneGroupIdList));
-            logger.logError("找不到重量等级的可配在场箱总共有：" + noneWeightIdList.toString(), !ValidatorUtil.isEmpty(noneWeightIdList));
+            logger.logError("找不到属性组的可配在场箱如下：" + noneGroupIdList.toString(), !ValidatorUtil.isEmpty(noneGroupIdList));
+            logger.logError("找不到重量等级的可配在场箱如下：" + noneWeightIdList.toString(), !ValidatorUtil.isEmpty(noneWeightIdList));
         } else { //验证通过
             workingData.setGroupWeightNumMap(groupWeightNumMap);
         }
