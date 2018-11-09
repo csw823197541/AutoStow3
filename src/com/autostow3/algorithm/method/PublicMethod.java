@@ -30,7 +30,7 @@ public class PublicMethod {
 
     private static boolean compareContainerGroup(YardContainer yardContainer, ContainerGroup containerGroup) {
         if (compareType(yardContainer.getType(), containerGroup.getType())) {
-            if (yardContainer.getDstPort().equals(containerGroup.getPortCd())) { //todo: 父子港口问题
+            if (yardContainer.getDstPort().equals(containerGroup.getPortCd())) { //todo: 父子港口问题，看这个目的港有没有父港口，按父港口找groupId
                 if (yardContainer.getSize().equals(containerGroup.getSize())) {
                     if (yardContainer.getEfFlag().equals(containerGroup.getEfFlag())) {
                         if (yardContainer.getRfFlag().equals(containerGroup.getRfFlag())) {

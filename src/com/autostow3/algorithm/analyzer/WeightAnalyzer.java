@@ -21,7 +21,9 @@ public class WeightAnalyzer {
         Logger logger = workingData.getLogger();
         List<WeightGroup> weightGroupList = workingData.getAllWeightGroups();
         sortWeightGroupListByMinWeight(weightGroupList);
-        //todo: 验证重量等级分组的合理性
+        //todo: 验证重量等级分组的合理性，检查已划分重量等级的预配位符合要求的在场箱数目够不够
+        // 限定的重量等级检查是否符合要求：甲板上从轻一个等级的找，没有就找重一个等级的，继续这样找；甲板下相反
+
         // 设置重量等级分组Seq
         for (int i = 0; i < weightGroupList.size(); i++) {
             weightGroupList.get(i).setWeightSeq(i + 1);
