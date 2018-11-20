@@ -34,7 +34,6 @@ public class StowProcess {
         logger.logInfo("开始执行...");
         long st = System.currentTimeMillis();
 
-        //..............
 
         // 1、属性组、重量等级与可配在场箱数目检查
         groupWeightAnalyzer.checkGroupAndWeightCorrect(workingData);
