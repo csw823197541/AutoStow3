@@ -23,7 +23,7 @@ public class Test11_13 {
 //        String filePath = "Test.AutoStow3/autoStowData/18.11.13/11.13槽重多次配载/STOW-WEIGHT贝塔出口航次：FJBCESHIE进口航次：FJBCESHII-20181113095704481/";
 //        String stowInfo = FileUtil.readFileToString(new File(filePath + "smartStowWeightImportDataJson.txt")).toString();
 
-        String filePath = "Test.AutoStow3/autoStowData/18.10.19/10.19/STOW贝塔出口航次：FJBCESHIE进口航次：FJBCESHII-20181019144842847/";
+        String filePath = "Test.AutoStow3/autoStowData/18.11.13/11.13槽重多次配载/STOW贝塔出口航次：FJBCESHIE进口航次：FJBCESHII-20181113095705528/";
         String stowInfo = FileUtil.readFileToString(new File(filePath + "smartStowImportDataJson.txt")).toString();
 
         Gson gson = new GsonBuilder().create();
