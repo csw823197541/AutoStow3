@@ -1,6 +1,6 @@
 package com.autostow3.algorithm.weight;
 
-import com.autostow3.algorithm.analyzer.WeightAnalyzer;
+import com.autostow3.algorithm.analyzer.GroupWeightAnalyzer;
 import com.autostow3.algorithm.method.PublicMethod;
 import com.autostow3.data.AllRuntimeData;
 import com.autostow3.data.single.StructureData;
@@ -21,12 +21,12 @@ public class WeightProcess {
 
     private WorkingData workingData;
     private StructureData structureData;
-    private WeightAnalyzer weightAnalyzer;
+    private GroupWeightAnalyzer groupWeightAnalyzer;
 
     public WeightProcess(AllRuntimeData allRuntimeData, Long berthId) {
         workingData = allRuntimeData.getWorkingDataByBerthId(berthId);
         structureData = allRuntimeData.getStructDataByVesselCode(workingData.getVesselCode());
-        weightAnalyzer = new WeightAnalyzer();
+        groupWeightAnalyzer = new GroupWeightAnalyzer();
     }
 
     public void processWeightLevel() {
@@ -35,7 +35,9 @@ public class WeightProcess {
         long st = System.currentTimeMillis();
 
         // 根据属性组统计每个重量等级的在场箱个数，并且按等级重量降序排序
-        weightAnalyzer.analyzeGroupAndWeight(workingData);
+        groupWeightAnalyzer.initGroupWeightNum(workingData);
+
+        // 限定的重量等级检查是否符合要求：甲板上从轻一个等级的找，没有就找重一个等级的，继续这样找；甲板下相反
 
         // 优先划分等级较重的给预配位
         drawWeightLocation(workingData, structureData);
